@@ -1,7 +1,8 @@
 import time
 import math
 nums = []
-seconds=time.localtime().tm_sec
+seconds = time.localtime().tm_sec
+
 
 def pseudo_random(x0):
     '''
@@ -15,13 +16,13 @@ def pseudo_random(x0):
     '''
     a, c, m = 3, 7, 7877
 
-    x= (x0 * a + c) % m
+    x = (x0 * a + c) % m
     nums.append(x)
-    return 0
+    return x
+
 
 seed = 1
 nums.append(seed)
-
 
 
 def twobit(it):
@@ -35,13 +36,14 @@ def twobit(it):
     for i in range((len(it))):
         temp_it = ''
         k = it[i]
-        while k>1:
-            temp_it = str(k%2) + temp_it
+        while k > 1:
+            temp_it = str(k % 2) + temp_it
             k = k//2
-        temp_it = str(k%2) + temp_it
-        it2+= temp_it
+        temp_it = str(k % 2) + temp_it
+        it2 += temp_it
         # print(it2)
     return it2
+
 
 def encoding(stroka):
     '''
@@ -62,29 +64,29 @@ def encoding(stroka):
 
     bit_stroka = twobit(letters)
     # print(bit_stroka)
-    helper_encode=''
+    helper_encode = ''
     encoded_stroka = ''
     for i in range(len(bit_stroka)//4):
-       
-        temp_pseudo = nums[seconds]%16
+
+        temp_pseudo = nums[seconds] % 16
         bit_pseudo = ''
-        while temp_pseudo>1:
-            bit_pseudo = str(temp_pseudo%2) + bit_pseudo
-            temp_pseudo= temp_pseudo//2
-        bit_pseudo = str(temp_pseudo%2) + bit_pseudo
-        while len(bit_pseudo)<4:
+        while temp_pseudo > 1:
+            bit_pseudo = str(temp_pseudo % 2) + bit_pseudo
+            temp_pseudo = temp_pseudo//2
+        bit_pseudo = str(temp_pseudo % 2) + bit_pseudo
+        while len(bit_pseudo) < 4:
             bit_pseudo = '0' + bit_pseudo
-        helper_encode+=bit_pseudo
+        helper_encode += bit_pseudo
     for i in range(len(helper_encode)):
-        if bit_stroka[i]==helper_encode[i]:
-            encoded_stroka+='0'
+        if bit_stroka[i] == helper_encode[i]:
+            encoded_stroka += '0'
         else:
-            encoded_stroka+='1'
+            encoded_stroka += '1'
 
     return encoded_stroka, helper_encode
 
 
-def decoder (key, lock):
+def decoder(key, lock):
     '''
     Функция декодер получает на вход две строки key, lock
     key - строка ключа, с помощью которого расшифровывается строка lock
@@ -95,27 +97,24 @@ def decoder (key, lock):
     decoded_stroka = ''
     for i in range(len(key)):
         if key[i] == lock[i]:
-            decoded_stroka+='0'
+            decoded_stroka += '0'
         else:
-            decoded_stroka+='1'
-    decoded_letters=''
+            decoded_stroka += '1'
+    decoded_letters = ''
     for i in range(len(decoded_stroka)//8):
-        temp_stroka=''
+        temp_stroka = ''
         for j in range(8):
-            temp_stroka+=decoded_stroka[8*i+j]
-        num_letter=0
+            temp_stroka += decoded_stroka[8*i+j]
+        num_letter = 0
         for j in range(len(temp_stroka)):
-            if temp_stroka[j]=='1':
-                num_letter+= 2**(7-j)
+            if temp_stroka[j] == '1':
+                num_letter += 2**(7-j)
         decoded_letters += chr(num_letter - 128)
-    
 
-    return(decoded_letters)
-    
+    return (decoded_letters)
 
 
-
-stroka = input()
+stroka = "aip"
 for i in range(seconds):
     pseudo_random(nums[i])
 
@@ -124,14 +123,15 @@ key = key[1]
 crypted = encoding(stroka)
 crypted = crypted[0]
 # print(nums)
-# print(encoding(stroka))
+print(encoding(stroka))
 otvet = decoder(key, crypted)
-proverka_na_pravilnost=''
-if stroka==otvet:
-    proverka_na_pravilnost='совпадает'
+proverka_na_pravilnost = ''
+if stroka == otvet:
+    proverka_na_pravilnost = 'совпадает'
 else:
-    proverka_na_pravilnost='не совпадает'
-print(f"Расшифрованная строка получилась {otvet}, с оригинальной строкой {proverka_na_pravilnost}")
+    proverka_na_pravilnost = 'не совпадает'
+print(
+    f"Расшифрованная строка получилась {otvet}, с оригинальной строкой {proverka_na_pravilnost}")
 
 
 def force_attack_16(code):
@@ -142,26 +142,26 @@ def force_attack_16(code):
         функцию attack_rashivrovka
     Если результат оттуда не пустой, то в список attack16 добавляется новое значение
     '''
-    attack16=[]
+    attack16 = []
     for i in range(16):
-        bit=''
+        bit = ''
         temp_peremennaya = i
-        while temp_peremennaya>1:
-            bit= str(temp_peremennaya%2) + bit
+        while temp_peremennaya > 1:
+            bit = str(temp_peremennaya % 2) + bit
             temp_peremennaya = temp_peremennaya//2
         bit = str(temp_peremennaya) + bit
-        while len(bit)<4:
+        while len(bit) < 4:
             bit = '0' + bit
-        trykey=''
+        trykey = ''
         for j in range(len(code)//4):
             trykey += bit
         temporary = attack_rashivrovka(code, trykey)
         if temporary:
             attack16.append(temporary)
-    return(attack16)
+    return (attack16)
+
 
 def attack_rashivrovka(stroka, key):
-    
     '''
     Функция работает почти так же, как и decoder, за исключением проверки на "легитимность"
     Потому что невозможно существовать num_letter<128 или >256
@@ -169,49 +169,49 @@ def attack_rashivrovka(stroka, key):
     decoded_stroka = ''
     for i in range(len(key)):
         if key[i] == stroka[i]:
-            decoded_stroka+='0'
+            decoded_stroka += '0'
         else:
-            decoded_stroka+='1'
-    decoded_letters=''
+            decoded_stroka += '1'
+    decoded_letters = ''
     for i in range(len(decoded_stroka)//8):
-        temp_stroka=''
+        temp_stroka = ''
         for j in range(8):
-            temp_stroka+=decoded_stroka[8*i+j]
-        num_letter=0
+            temp_stroka += decoded_stroka[8*i+j]
+        num_letter = 0
         for j in range(len(temp_stroka)):
-            if temp_stroka[j]=='1':
-                num_letter+= 2**(7-j)
-        if num_letter>128 and num_letter<256:
+            if temp_stroka[j] == '1':
+                num_letter += 2**(7-j)
+        if num_letter > 128 and num_letter < 256:
 
             decoded_letters += chr(num_letter - 128)
-    
 
-    return(decoded_letters)    
-
+    return (decoded_letters)
 
 
 seed1 = nums[-1]
-nums=[]
+nums = []
 nums.append(seed1)
 for i in range(20):
     pseudo_random(nums[i])
 
-modnums=[]
+modnums = []
 for i in range(len(nums)-1):
     modnums.append(nums[i+1] - nums[i])
-umodnums=[]
+umodnums = []
 for i in range(len(modnums)-2):
     umodnums.append(abs(modnums[i+2]*modnums[i] - modnums[i+1]*modnums[i+1]))
 
 potential_m = math.gcd(*umodnums)
 # print(potential_m)
+
+
 def calc_a_c():
     '''
     Функция выдает коэффиценты ГПСЧ имея только информацию о модуле и нескольких числах последовательности
     nums - массив сгенерированных генератором чисел
     a, c - коэффиценты
     '''
-    x0= nums[-1]
+    x0 = nums[-1]
     pseudo_random(x0)
     x1 = nums[-1]
     pseudo_random(x1)
@@ -219,8 +219,8 @@ def calc_a_c():
     pseudo_random(x2)
     y1 = x2 - x1
     y0 = x1 - x0
-    counter=0
-    a=1
+    counter = 0
+    a = 1
     m = potential_m
     # while counter!=-1:
     #     if (y1- m*counter)%y0 == 0:
@@ -231,21 +231,23 @@ def calc_a_c():
     #     if counter>m:
     #         break
     for i in range(len(nums)-2):
-        if nums[i]<nums[i+1] and nums[i+1]<nums[i+2]:
+        if nums[i] < nums[i+1] and nums[i+1] < nums[i+2]:
             a = (nums[i+2]-nums[i+1])//(nums[i+1]-nums[i])
-            break    
+            break
     k = (a * x0)//m
     c = x1 + m*k - x0*a
     return (a, c)
+
+
 potential = (0, 0)
 potential = calc_a_c()
-if potential[0]==0:
+if potential[0] == 0:
     print("Сгенерировать коэффиценты ГПСЧ не получилось. Попробуйте заново запустить программу.")
 
 else:
     potential_a = potential[0]
     potential_c = potential[1]
-        
+
     # print(potential)
     # print(potential_a)
 
@@ -264,30 +266,30 @@ def attacked_pseudo_random(x0, a, c, m):
 
     '''
 
-    x= (x0 * a + c) % m
+    x = (x0 * a + c) % m
     attacked_num.append(x)
     return 0
 
 
-
-attack16= force_attack_16(crypted)
-attack60=[]
-if potential[0]!=0:
+attack16 = force_attack_16(crypted)
+attack60 = []
+if potential[0] != 0:
     for i in range(60):
-        attacked_pseudo_random(attacked_num[i], potential_a, potential_c, potential_m)
+        attacked_pseudo_random(
+            attacked_num[i], potential_a, potential_c, potential_m)
 
     code = crypted
     for i in range(len(attacked_num)):
-        temp_rand = attacked_num[i]%60
-        temp_rand = temp_rand%16
-        bit=''
-        while temp_rand>1:
-            bit= str(temp_rand%2) + bit
+        temp_rand = attacked_num[i] % 60
+        temp_rand = temp_rand % 16
+        bit = ''
+        while temp_rand > 1:
+            bit = str(temp_rand % 2) + bit
             temp_rand = temp_rand//2
         bit = str(temp_rand) + bit
-        while len(bit)<4:
+        while len(bit) < 4:
             bit = '0' + bit
-        trykey=''
+        trykey = ''
         for j in range(len(code)//4):
             trykey += bit
         temporary = attack_rashivrovka(code, trykey)
@@ -295,5 +297,5 @@ if potential[0]!=0:
             attack60.append(temporary)
 
 print(f"Для метода атаки брутфорс получились ответы{attack16}")
-if potential[0]!=0:
+if potential[0] != 0:
     print(f"Для метода атаки через взлом ГПСЧ получились ответы{attack60}")
