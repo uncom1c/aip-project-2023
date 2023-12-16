@@ -13,6 +13,7 @@ def pseudo_random(x0):
     a, c, m - натуральные числа, задаются пользователем самостоятельно
     Функция добавляет в nums следующий сгенерированный элемент
 
+
     '''
     a, c, m = 3, 7, 7877
 
@@ -118,7 +119,8 @@ def decoder(key, lock):
     return (decoded_letters)
 
 
-stroka = "aip"
+# stroka = "aip"
+stroka = input()
 
 
 key = encoding(stroka, seconds)
@@ -126,7 +128,7 @@ key = key[1]
 crypted = encoding(stroka, seconds)
 crypted = crypted[0]
 # print(nums)
-print(encoding(stroka, seconds))
+# print(encoding(stroka, seconds))
 otvet = decoder(key, crypted)
 proverka_na_pravilnost = ''
 if stroka == otvet:
@@ -134,9 +136,9 @@ if stroka == otvet:
 else:
     proverka_na_pravilnost = 'не совпадает'
 print(
-    f"Расшифрованная строка получилась {otvet}, с оригинальной строкой {proverka_na_pravilnost}")
+    f"Расшифрованная строка получилась <{otvet}>, с оригинальной строкой {proverka_na_pravilnost}")
 
-
+print("")
 def force_attack_16(code):
     '''
     Данная функция берет на вход зашифрованную строку (code)
@@ -246,6 +248,7 @@ potential = (0, 0)
 potential = calc_a_c(potential_m)
 if potential[0] == 0:
     print("Сгенерировать коэффиценты ГПСЧ не получилось. Попробуйте заново запустить программу.")
+    print("")
 
 else:
     potential_a = potential[0]
@@ -307,6 +310,7 @@ if potential[0] != 0:
         if temporary:
             attack60.append(temporary)
     print(f"Для метода атаки через взлом ГПСЧ получились ответы{attack60}")
+    print("")
 
 print(f"Для метода атаки брутфорс получились ответы{attack16}")
     
