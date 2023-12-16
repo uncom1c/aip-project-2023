@@ -45,7 +45,7 @@ def twobit(it):
     return it2
 
 
-def encoding(stroka):
+def encoding(stroka, seconds):
     '''
     Функция берет на вход строку stroka
     letters - список из ascii-номеров каждого элемента строки stroka, к которому прибавили 128, чтобы в двоичной системе длина была 8
@@ -59,6 +59,9 @@ def encoding(stroka):
     Затем каждый элемент bit_stroka я xor-ю с helper_encode дабы получить зашифрованную строку encoded_stroka
     '''
     letters = []
+    for i in range(seconds):
+        pseudo_random(nums[i])
+
     for i in range(len(stroka)):
         letters.append(ord(stroka[i])+128)
 
@@ -95,6 +98,7 @@ def decoder(key, lock):
     decoded_letters - строка изначальных символов
     '''
     decoded_stroka = ''
+    
     for i in range(len(key)):
         if key[i] == lock[i]:
             decoded_stroka += '0'
@@ -115,15 +119,14 @@ def decoder(key, lock):
 
 
 stroka = "aip"
-for i in range(seconds):
-    pseudo_random(nums[i])
 
-key = encoding(stroka)
+
+key = encoding(stroka, seconds)
 key = key[1]
-crypted = encoding(stroka)
+crypted = encoding(stroka, seconds)
 crypted = crypted[0]
 # print(nums)
-print(encoding(stroka))
+print(encoding(stroka, seconds))
 otvet = decoder(key, crypted)
 proverka_na_pravilnost = ''
 if stroka == otvet:
@@ -205,7 +208,7 @@ potential_m = math.gcd(*umodnums)
 # print(potential_m)
 
 
-def calc_a_c():
+def calc_a_c(potential_m):
     '''
     Функция выдает коэффиценты ГПСЧ имея только информацию о модуле и нескольких числах последовательности
     nums - массив сгенерированных генератором чисел
@@ -240,7 +243,7 @@ def calc_a_c():
 
 
 potential = (0, 0)
-potential = calc_a_c()
+potential = calc_a_c(potential_m)
 if potential[0] == 0:
     print("Сгенерировать коэффиценты ГПСЧ не получилось. Попробуйте заново запустить программу.")
 

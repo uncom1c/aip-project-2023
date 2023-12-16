@@ -1,6 +1,8 @@
 import unittest
-
-from notebook import pseudo_random, twobit, encoding, decoder, force_attack_16, attack_rashivrovka, nums
+from unittest.mock import Mock 
+import time
+from notebook import pseudo_random, twobit, encoding, decoder, force_attack_16, attack_rashivrovka, calc_a_c
+seconds = time.localtime().tm_sec
 
 
 
@@ -29,16 +31,21 @@ class notebooktest(unittest.TestCase):
     Тесты на правильность закодирования проверить нельзя по причине кодирования по секундам, потому ключи и шифровки динамичны
     '''
     # def test_encoding_1(self):
-    #     self.assertEqual(encoding('Hello'), ())    
+    #     self.assertEqual(encoding('Hello', seconds), ())    
     
     # def test_encoding_2(self):
-    #     self.assertEqual(encoding('aip'), )    
+    #     self.assertEqual(encoding('aip', seconds), ())  
+
+
     
     def test_decoder_1(self):
         self.assertEqual(decoder('0011011100011010000100110001001100010000', '1111111111111111111111111111111111111111'), 'Hello')
 
     def test_decoder_2(self):
         self.assertEqual(decoder('010010110100001101011010', '101010101010101010101010'), 'aip')
+
+    def test_calca_a_c(self):
+        self.assertEqual(calc_a_c(7877), (3,7))
     
     
 
